@@ -1,0 +1,160 @@
+@font-face {
+    font-family: CanvaSansMedium;
+    src: url(assets/CanvaSans-Medium.woff2);
+}
+
+:root {
+    --white00: rgba(255, 255, 255, 0);
+    --white07: rgba(255, 255, 255, 0.07);
+    --white20: rgba(255, 255, 255, 0.2);
+    --white40: rgba(255, 255, 255, 0.4);
+    --white50: rgba(255, 255, 255, 0.5);
+    --white75: rgba(255, 255, 255, 0.75);
+    --white90: rgba(255, 255, 255, 0.9);
+    --white: #ffffff;
+    --black07: rgba(14, 19, 24, 0.07);
+    --black15: rgba(14, 19, 24, 0.15);
+    --black20: rgba(14, 19, 24, 0.20);
+    --black: #0e1318;
+
+    --Primitive-Gradient-gradientCanvaBrandHorizontal: linear-gradient(90deg, #00C4CC 0%, #7D2AE8 100%);
+
+    --startingWidth: 169.56px;
+    --oneU: 8px;
+    --twoU: 16px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+menu {
+    background: var(--Primitive-Gradient-gradientCanvaBrandHorizontal);
+    /* height: 56px; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px;
+    gap: var(--oneU);
+}
+
+button,
+input {
+    font-size: 14px;
+    font-family: 'CanvaSansMedium';
+
+    display: flex;
+    align-items: center;
+    gap: var(--oneU);
+    padding: var(--oneU);
+    border-radius: var(--oneU);
+    border: none;
+
+    transition: all 0.1s linear;
+
+}
+
+button#target {
+
+    width: var(--startingWidth);
+    transition: width 200ms ease-in-out;
+    text-wrap: nowrap;
+    animation-duration: 500ms;
+    overflow: clip;
+}
+
+button#target img {
+    animation-duration: 500ms; 
+}
+
+@keyframes colorAnimation {
+    0% {
+        color: var(--white40);
+    }
+    75% {
+        color: var(--white40);
+    }
+}
+
+@keyframes opacityAnimation {
+    0% {
+        opacity: 50%;
+    }
+    75% {
+        opacity: 50%;
+    }
+}
+
+
+button.full {
+
+    padding-right: var(--twoU);
+}
+
+button.primary {
+    background-color: var(--white90);
+    color: var(--black);
+}
+
+button.primary:hover {
+    background-color: var(--white);
+}
+
+button.secondary {
+    background-color: transparent;
+    color: var(--white);
+    border: 1px solid var(--white20);
+}
+
+button.secondary:hover {
+    background-color: var(--white07);
+}
+
+input {
+    background-color: transparent;
+    border: none;
+    color: var(--white);
+    width: fit-content;
+    text-align: right;
+    border: 0.2px solid transparent;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+section {
+    align-self: flex-end;
+    display: flex;
+}
+
+section div {
+    font-size: 14px;
+    font-family: 'CanvaSansMedium';
+    border: 1px solid var(--black);
+    color: var(--black);
+
+    padding: 8px;
+    background-color: var(--black07);
+    flex-grow: 1;
+    height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+section div:hover {
+    background-color: var(--black15);
+}
+
+section div:active {
+    background-color: var(--black20);
+}
+
+/* input:hover {
+    border: 0.2px solid var(--borderColorButton);
+} */
+
+main {
+    height: 120px;
+}
