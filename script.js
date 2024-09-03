@@ -43,8 +43,13 @@ var switchContainer = document.querySelector("section#switches");
 // the container for canvases
 var canvasContainer = document.querySelector("main");
 
+// seconds since last loaded
+var timeCount = 0;
+var lastType = "Print";
+
 canvasContainer.addEventListener("scroll", (target) => {
     let canvases = document.querySelectorAll("article");
+    
     // function isScrolledIntoView(el) {
     for (let i = 0; i < canvases.length; i ++) {
         var rect = canvases[i].getBoundingClientRect();
@@ -59,9 +64,24 @@ canvasContainer.addEventListener("scroll", (target) => {
         // if (canvases[i].innerText == lastClickedType) return;
 
         if (isVisible && type.type != lastClickedType) {
+
+            if (lastType == type.type) {
+                timeCount = timeCount + 1;
+                // console.log(timeCount);
+            } else {
+                lastType = type.type;
+                timeCount = 0;
+            }
             // console.log(type.type);
             // if (type.type)
-            changeButton(type);
+            // console.log(timeCount);
+            if (timeCount > 2) {
+                // console.log(timeCount);
+                changeButton(type);
+                // timeCount = 0;
+            }
+            
+            
             // setTimeout(() => changeButton(type), 500);
         };
     }
