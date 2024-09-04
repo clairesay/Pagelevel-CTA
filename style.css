@@ -68,7 +68,6 @@ input {
 }
 
 button#target {
-
     width: var(--startingWidth);
     transition: width 200ms ease-in-out;
     text-wrap: nowrap;

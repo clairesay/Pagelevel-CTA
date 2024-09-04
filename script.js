@@ -42,24 +42,37 @@ const gui = new dat.GUI({ autoPlace: false });
 document.querySelector("#gui").append(gui.domElement);
 
 var prototypeState = {
-    animateIcon: false,
-    animateIconDuration: 500,
+    icon: false,
+    iconDuration: 500,
     // animateIconLowestOpacity: 40,
 
-    animateText: false,
-    animateTextDuration: 500,
+    text: false,
+    textDuration: 500,
+
+    container: true,
+    containerDuration: 200
     // animateTextLowestOpacity: 40
 };
 
-gui.add(prototypeState, "animateIcon")
-gui.add(prototypeState, "animateText")
+gui.add(prototypeState, "icon")
+gui.add(prototypeState, "iconDuration", 0, 2000)
 
-gui.add(prototypeState, "animateIconDuration", 0, 1000)
-gui.add(prototypeState, "animateTextDuration", 0, 1000)
+gui.add(prototypeState, "text")
+gui.add(prototypeState, "textDuration", 0, 2000)
 
-// gui.add(prototypeState, "animateIconLowestOpacity", 0, 100)
-// gui.add(prototypeState, "animateTextLowestOpacity", 0, 100)
+// transition state for container
+gui.add(prototypeState, "container").onChange((value) => {
+    if (value == true) {
+        button.style.transition = "width " + (Math.round(prototypeState.containerDuration * 10 / 1000) / 10) + "s ease-in-out";
+    } else {
+        button.style.transition = "none";
+    }
+})
 
+// transition duration for container 
+gui.add(prototypeState, "containerDuration", 0, 2000).onChange((value) => {
+    button.style.transitionDuration = Math.round(value * 10 / 1000) / 10 + "s";
+})
 
 // store the last clicked button type
 var lastClickedType = "Print";
@@ -169,24 +182,24 @@ function changeButton(type, i) {
         button.style.marginLeft = "8px";
     }
 
-    if (prototypeState.animateIcon == true) {
+    if (prototypeState.icon == true) {
         // apply animations
         button.querySelector("img").style.animationName = "opacityAnimation";
 
         // remove animations upon completion
         setTimeout(() => {
             button.querySelector("img").style.animationName = "none";
-        }, prototypeState.animateIconDuration)
+        }, prototypeState.iconDuration)
     }
 
-    if (prototypeState.animateText == true) {
+    if (prototypeState.text == true) {
         // apply animations
         button.style.animationName = "colorAnimation";
 
         // remove animations upon completion
         setTimeout(() => {
             button.style.animationName = "none";
-        }, prototypeState.animateTextDuration)
+        }, prototypeState.textDuration)
     }
 
     lastClickedType = type.type;
