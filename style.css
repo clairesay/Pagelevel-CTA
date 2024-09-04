@@ -255,7 +255,7 @@ main {
 }
 
 #gui {
-    position: absolute;
+    position: fixed;
     top: 56px;
     left: 0;
     width: 500px;
