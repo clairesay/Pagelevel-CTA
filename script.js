@@ -37,6 +37,30 @@ var switchTypes = [
     }
 ];
 
+// GUI
+const gui = new dat.GUI({ autoPlace: false });
+document.querySelector("#gui").append(gui.domElement);
+
+var prototypeState = {
+    animateIcon: false,
+    animateIconDuration: 500,
+    // animateIconLowestOpacity: 40,
+
+    animateText: false,
+    animateTextDuration: 500,
+    // animateTextLowestOpacity: 40
+};
+
+gui.add(prototypeState, "animateIcon")
+gui.add(prototypeState, "animateText")
+
+gui.add(prototypeState, "animateIconDuration", 0, 1000)
+gui.add(prototypeState, "animateTextDuration", 0, 1000)
+
+// gui.add(prototypeState, "animateIconLowestOpacity", 0, 100)
+// gui.add(prototypeState, "animateTextLowestOpacity", 0, 100)
+
+
 // store the last clicked button type
 var lastClickedType = "Print";
 var lastClickedTypeID = 0;
@@ -55,11 +79,11 @@ var timeCount = 0;
 var lastType = "Print";
 
 
-canvasContainer.addEventListener("scroll", (target) => {    
+canvasContainer.addEventListener("scroll", (target) => {
     // function isScrolledIntoView(el) {
     var canvases = document.querySelectorAll("article");
 
-    for (let i = 0; i < canvases.length; i ++) {
+    for (let i = 0; i < canvases.length; i++) {
         var rect = canvases[i].getBoundingClientRect();
         var elemTop = rect.top;
         var elemBottom = rect.bottom;
@@ -81,7 +105,7 @@ canvasContainer.addEventListener("scroll", (target) => {
             if (timeCount > 1) {
                 changeButton(type, i);
             }
-            
+
         };
     }
 })
@@ -94,8 +118,6 @@ for (let i = 0; i < switchTypes.length; i++) {
     canvasContainer.appendChild(thisCanvas);
     thisCanvas.innerText = switchTypes[i].type;
 
-
-
     ////////
     // create a switch for each type
     let thisSwitch = document.createElement("div");
@@ -104,7 +126,7 @@ for (let i = 0; i < switchTypes.length; i++) {
 
     thisSwitch.addEventListener("click", (target) => {
 
-                // check for duplicate clicks
+        // check for duplicate clicks
         if (target.srcElement.innerText == lastClickedType) return;
 
         changeButton(switchTypes[i], i);
@@ -124,7 +146,7 @@ for (let i = 0; i < switchTypes.length; i++) {
 function changeButton(type, i) {
     // replace selected tile
     let allTypes = document.querySelectorAll("section#switches div.switch");
-    for (let n = 0; n < allTypes.length; n ++) {
+    for (let n = 0; n < allTypes.length; n++) {
         allTypes[n].classList.remove("selected");
     }
 
@@ -147,17 +169,26 @@ function changeButton(type, i) {
         button.style.marginLeft = "8px";
     }
 
-    /////// animation //////
-    // // apply animations
-    // button.style.animationName = "colorAnimation";
-    // button.querySelector("img").style.animationName = "opacityAnimation";
+    if (prototypeState.animateIcon == true) {
+        // apply animations
+        button.querySelector("img").style.animationName = "opacityAnimation";
 
-    // // remove animations upon completion
-    // setTimeout(() => {
-    //     button.style.animationName = "none";
-    //     button.querySelector("img").style.animationName = "none";
-    // }, 500)
-    
+        // remove animations upon completion
+        setTimeout(() => {
+            button.querySelector("img").style.animationName = "none";
+        }, prototypeState.animateIconDuration)
+    }
+
+    if (prototypeState.animateText == true) {
+        // apply animations
+        button.style.animationName = "colorAnimation";
+
+        // remove animations upon completion
+        setTimeout(() => {
+            button.style.animationName = "none";
+        }, prototypeState.animateTextDuration)
+    }
+
     lastClickedType = type.type;
     lastClickedTypeID = i;
     // console.log(lastClickedType);
@@ -182,8 +213,8 @@ toggle.addEventListener("click", () => {
         visibility(true);
 
         main.style.overflow = "scroll";
-        main.style.height ="calc(100vh - 6px - 58px - 76px - 16px)"   
-        fixScroll(true, "smooth");     
+        main.style.height = "calc(100vh - 6px - 58px - 76px - 16px)"
+        fixScroll(true, "smooth");
     } else {
         toggle.classList.remove("scroll");
         toggle.classList.add("thumbnail");
@@ -197,7 +228,7 @@ toggle.addEventListener("click", () => {
         visibility(false);
 
         main.style.overflow = "hidden";
-        main.style.height ="calc(100vh - 6px - 58px - 184px - 16px)"
+        main.style.height = "calc(100vh - 6px - 58px - 184px - 16px)"
         fixScroll(true, "instant");
     }
 
@@ -205,11 +236,11 @@ toggle.addEventListener("click", () => {
 
 function visibility(makeAllVisible) {
     if (makeAllVisible) {
-        for (let i = 0; i < switchContainer.children.length; i ++) {
+        for (let i = 0; i < switchContainer.children.length; i++) {
             document.querySelectorAll("article")[i].style.visibility = "visible";
         }
     } else {
-        for (let i = 0; i < switchContainer.children.length; i ++) {
+        for (let i = 0; i < switchContainer.children.length; i++) {
             if (i == lastClickedTypeID) {
                 console.log("it's here" + i);
                 document.querySelectorAll("article")[i].style.visibility = "visible";
@@ -243,10 +274,14 @@ function fixScroll(animate, scrollBehaviour) {
     //         behavior: scrollBehaviour
     //     });
     // } else {
-        canvasContainer.scrollTo({
-            top: (elemHeight + value)*lastClickedTypeID, 
-            left: 0,
-            behavior: scrollBehaviour
-        });
+    canvasContainer.scrollTo({
+        top: (elemHeight + value) * lastClickedTypeID,
+        left: 0,
+        behavior: scrollBehaviour
+    });
     // }
 }
+
+
+
+///// animation //////

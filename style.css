@@ -80,23 +80,23 @@ button#target img {
     animation-duration: 500ms; 
 }
 
-/* @keyframes colorAnimation {
+@keyframes colorAnimation {
     0% {
         color: var(--white40);
     }
     75% {
         color: var(--white40);
     }
-} */
+}
 
-/* @keyframes opacityAnimation {
+@keyframes opacityAnimation {
     0% {
-        opacity: 50%;
+        opacity: 40%;
     }
     75% {
-        opacity: 50%;
+        opacity: 40%;
     }
-} */
+}
 
 
 button.full {
@@ -252,4 +252,11 @@ main {
     height: calc(100vh - 6px - 58px - 184px - 16px);
     overflow: hidden;
     padding: 24px;
+}
+
+#gui {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    width: 500px;
 }
