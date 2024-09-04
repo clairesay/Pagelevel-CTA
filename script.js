@@ -242,7 +242,6 @@ function visibility(makeAllVisible) {
     } else {
         for (let i = 0; i < switchContainer.children.length; i++) {
             if (i == lastClickedTypeID) {
-                console.log("it's here" + i);
                 document.querySelectorAll("article")[i].style.visibility = "visible";
             } else {
                 document.querySelectorAll("article")[i].style.visibility = "hidden";
