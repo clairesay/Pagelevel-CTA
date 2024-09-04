@@ -80,23 +80,23 @@ button#target img {
     animation-duration: 500ms; 
 }
 
-@keyframes colorAnimation {
+/* @keyframes colorAnimation {
     0% {
         color: var(--white40);
     }
     75% {
         color: var(--white40);
     }
-}
+} */
 
-@keyframes opacityAnimation {
+/* @keyframes opacityAnimation {
     0% {
         opacity: 50%;
     }
     75% {
         opacity: 50%;
     }
-}
+} */
 
 
 button.full {

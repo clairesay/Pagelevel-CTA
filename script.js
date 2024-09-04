@@ -146,15 +146,17 @@ function changeButton(type, i) {
         button.style.opacity = "100%";
         button.style.marginLeft = "8px";
     }
-    // apply animations
-    button.style.animationName = "colorAnimation";
-    button.querySelector("img").style.animationName = "opacityAnimation";
 
-    // remove animations upon completion
-    setTimeout(() => {
-        button.style.animationName = "none";
-        button.querySelector("img").style.animationName = "none";
-    }, 500)
+    /////// animation //////
+    // // apply animations
+    // button.style.animationName = "colorAnimation";
+    // button.querySelector("img").style.animationName = "opacityAnimation";
+
+    // // remove animations upon completion
+    // setTimeout(() => {
+    //     button.style.animationName = "none";
+    //     button.querySelector("img").style.animationName = "none";
+    // }, 500)
     
     lastClickedType = type.type;
     lastClickedTypeID = i;
