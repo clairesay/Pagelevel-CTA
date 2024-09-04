@@ -28,11 +28,18 @@ var switchTypes = [
         copy: "Preview",
         icon: "assets/eye.svg",
         width: "111.81px"
+    },
+    {
+        type: "None",
+        copy: "",
+        icon: "assets/blank.svg",
+        width: "0px"
     }
 ];
 
 // store the last clicked button type
-var lastClickedType;
+var lastClickedType = "Print";
+var lastClickedTypeID = 0;
 
 // the button in question
 var button = document.querySelector("#target");
@@ -47,10 +54,11 @@ var canvasContainer = document.querySelector("main");
 var timeCount = 0;
 var lastType = "Print";
 
-canvasContainer.addEventListener("scroll", (target) => {
-    let canvases = document.querySelectorAll("article");
-    
+
+canvasContainer.addEventListener("scroll", (target) => {    
     // function isScrolledIntoView(el) {
+    var canvases = document.querySelectorAll("article");
+
     for (let i = 0; i < canvases.length; i ++) {
         var rect = canvases[i].getBoundingClientRect();
         var elemTop = rect.top;
@@ -58,40 +66,24 @@ canvasContainer.addEventListener("scroll", (target) => {
 
         // Only completely visible elements return true:
         var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-        // console.log(i);
         var type = switchTypes[i];
-        // console.log(canvases[i].innerText)
-        // if (canvases[i].innerText == lastClickedType) return;
+
 
         if (isVisible && type.type != lastClickedType) {
 
             if (lastType == type.type) {
                 timeCount = timeCount + 1;
-                // console.log(timeCount);
             } else {
                 lastType = type.type;
                 timeCount = 0;
             }
-            // console.log(type.type);
-            // if (type.type)
-            // console.log(timeCount);
-            if (timeCount > 2) {
-                // console.log(timeCount);
-                changeButton(type);
-                // timeCount = 0;
+
+            if (timeCount > 1) {
+                changeButton(type, i);
             }
             
-            
-            // setTimeout(() => changeButton(type), 500);
         };
     }
-
-    // Partially visible elements return true:
-    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
-    // console.log(thisCanvas);
-    // return isVisible;
-    // }
-
 })
 
 for (let i = 0; i < switchTypes.length; i++) {
@@ -111,28 +103,49 @@ for (let i = 0; i < switchTypes.length; i++) {
     thisSwitch.innerText = switchTypes[i].type;
 
     thisSwitch.addEventListener("click", (target) => {
-        let allTypes = document.querySelectorAll("section#switches div.switch");
-        for (let n = 0; n < allTypes.length; n ++) {
-            allTypes[n].classList.remove("selected");
-        }
 
-        thisSwitch.classList.add("selected");
-        changeButton(switchTypes[i]);
-        // check for duplicate clicks
+                // check for duplicate clicks
         if (target.srcElement.innerText == lastClickedType) return;
+
+        changeButton(switchTypes[i], i);
+
+        visibility(false);
+
+
+        fixScroll(false, "instant");
+
+
     })
 
     // add switch to the container
     switchContainer.appendChild(thisSwitch);
 }
 
-function changeButton(type) {
+function changeButton(type, i) {
+    // replace selected tile
+    let allTypes = document.querySelectorAll("section#switches div.switch");
+    for (let n = 0; n < allTypes.length; n ++) {
+        allTypes[n].classList.remove("selected");
+    }
+
+    allTypes[i].classList.add("selected");
+
     // replace button content
     button.innerHTML = "<img src=" + type.icon + ">" + type.copy;
 
     // set button width
     button.style.width = type.width;
 
+    // checking for the none case
+    if (type.type == "None") {
+        button.style.padding = "0px";
+        button.style.opacity = "0%";
+        button.style.marginLeft = "0px";
+    } else {
+        button.style.padding = "8px";
+        button.style.opacity = "100%";
+        button.style.marginLeft = "8px";
+    }
     // apply animations
     button.style.animationName = "colorAnimation";
     button.querySelector("img").style.animationName = "opacityAnimation";
@@ -144,5 +157,94 @@ function changeButton(type) {
     }, 500)
     
     lastClickedType = type.type;
+    lastClickedTypeID = i;
     // console.log(lastClickedType);
+}
+
+const toggle = document.querySelector("section#view-settings button.tertiary.icon");
+const footer = document.querySelector("footer");
+const main = document.querySelector("main");
+toggle.classList.add("thumbnail")
+toggle.addEventListener("click", () => {
+    // console.log("yes");
+    if (toggle.classList.contains("thumbnail")) {
+
+        toggle.classList.remove("thumbnail");
+        toggle.classList.add("scroll");
+        toggle.querySelector("img").src = "assets/scroll.svg";
+
+        footer.style.height = "32px"
+
+        switchContainer.style.display = "none";
+
+        visibility(true);
+
+        main.style.overflow = "scroll";
+        main.style.height ="calc(100vh - 6px - 58px - 76px - 16px)"   
+        fixScroll(true, "smooth");     
+    } else {
+        toggle.classList.remove("scroll");
+        toggle.classList.add("thumbnail");
+        toggle.querySelector("img").src = "assets/thumbnail.svg";
+
+        footer.style.height = "140px";
+
+        switchContainer.style.display = "flex";
+
+
+        visibility(false);
+
+        main.style.overflow = "hidden";
+        main.style.height ="calc(100vh - 6px - 58px - 184px - 16px)"
+        fixScroll(true, "instant");
+    }
+
+})
+
+function visibility(makeAllVisible) {
+    if (makeAllVisible) {
+        for (let i = 0; i < switchContainer.children.length; i ++) {
+            document.querySelectorAll("article")[i].style.visibility = "visible";
+        }
+    } else {
+        for (let i = 0; i < switchContainer.children.length; i ++) {
+            if (i == lastClickedTypeID) {
+                console.log("it's here" + i);
+                document.querySelectorAll("article")[i].style.visibility = "visible";
+            } else {
+                document.querySelectorAll("article")[i].style.visibility = "hidden";
+            }
+        }
+    }
+}
+
+visibility(false);
+
+function fixScroll(animate, scrollBehaviour) {
+    // var scrollBehaviour;
+    if (animate) {
+        // scrollBehaviour = "smooth";
+        value = 10;
+    } else {
+        // scrollBehaviour = "smooth"
+        value = 24;
+    }
+    // console.log("bruh")
+    var rect = document.querySelector("article").getBoundingClientRect();
+    var elemHeight = rect.height;
+    // console.log(lastClickedTypeID);
+    // var elemBottom = rect.bottom;
+    // if (lastClickedType == switchTypes.length - 1) {
+    //     canvasContainer.scrollTo({
+    //         top: (elemHeight*lastClickedTypeID + 500), 
+    //         left: 0, 
+    //         behavior: scrollBehaviour
+    //     });
+    // } else {
+        canvasContainer.scrollTo({
+            top: (elemHeight + value)*lastClickedTypeID, 
+            left: 0,
+            behavior: scrollBehaviour
+        });
+    // }
 }

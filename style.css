@@ -37,14 +37,18 @@ button:hover {
     cursor: pointer;
 }
 
-menu {
+header {
     background: var(--Primitive-Gradient-gradientCanvaBrandHorizontal);
     /* height: 56px; */
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding: 8px;
-    gap: var(--oneU);
+    /* gap: var(--oneU); */
+}
+
+header > * {
+    margin-left: 8px;
 }
 
 button,
@@ -146,6 +150,10 @@ article {
     font-family: 'CanvaSansMedium';
 }
 
+article:last-of-type {
+    margin-bottom: 48px;
+}
+
 footer {
     /* display: flex; */
     /* flex-direction: column; */
@@ -155,6 +163,7 @@ footer {
     padding: 8px;
     /* justify-content: space-between; */
     height: 140px;
+
 }
 
 section#view-settings {
@@ -241,6 +250,6 @@ main {
     align-items: center;
 
     height: calc(100vh - 6px - 58px - 184px - 16px);
-    overflow-y: scroll;
+    overflow: hidden;
     padding: 24px;
 }
