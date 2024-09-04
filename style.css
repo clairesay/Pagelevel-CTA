@@ -29,8 +29,13 @@
 body {
     background: var(--Background-colorTabdock, #F6F7F8);
     display: grid;
-    grid-template-rows: 58px auto auto;
+    grid-template-rows: 58px auto;
     /* overflow: clip; */
+}
+
+div#body {
+    display: grid;
+    grid-template-columns: 72px auto;
 }
 
 button:hover {
@@ -253,9 +258,18 @@ main {
     padding: 24px;
 }
 
+
+/* GUI */
 #gui {
     position: fixed;
     top: 56px;
-    left: 0;
+    left: 72px;
     width: 500px;
+}
+
+/* OBJECT PANEL */
+aside#object-panel {
+    width: 72px;
+    background-color: #f6f7f8;
+    height: calc(100vh - 56px);
 }

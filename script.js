@@ -293,7 +293,22 @@ function fixScroll(animate, scrollBehaviour) {
     });
     // }
 }
+// addEventListener("keypress", (event) => {});
 
+window.addEventListener("keydown", (event) => {
+    // var curren
+    // alert(event.key);
+    if (event.key == "ArrowRight") {
+        if (lastClickedTypeID + 1 >= switchTypes.length) return;
+        else changeButton(switchTypes[lastClickedTypeID + 1], lastClickedTypeID + 1); visibility(false); fixScroll(false, "instant");
 
+    } else if (event.key == "ArrowLeft") {
+        if (lastClickedTypeID <= 0) return;
+        else changeButton(switchTypes[lastClickedTypeID - 1], lastClickedTypeID - 1); visibility(false); fixScroll(false, "instant");
+    }
+})
+
+// initialise
+changeButton(switchTypes[0], 0)
 
 ///// animation //////
