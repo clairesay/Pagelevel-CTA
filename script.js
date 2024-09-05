@@ -223,8 +223,8 @@ var objectPanelState = {
 // view settings
 var viewSettingsState = {
     // animateTabs: false,
-    settingAnimateStyle: "None",
-    settingDuration: 200
+    toolbarAnimateStyle: "None",
+    toolbarDuration: 200
 }
 
 // icon animation
@@ -262,14 +262,14 @@ var guiObjectPanelStyle = guiOPAnimationSettings.add(objectPanelState, 'tabAnima
 var guiObjectPanelAnimationDuration = guiOPAnimationSettings.add(objectPanelState, "tabsDuration", 0, 2000);
 
 // view settings animation
-const guiViewSettingsAnimationSettings = gui.addFolder("View Settings");
+const guiViewSettingsAnimationSettings = gui.addFolder("Toolbar");
 guiViewSettingsAnimationSettings.open();
 
-var guiObjectPanelStyle = guiViewSettingsAnimationSettings.add(viewSettingsState, 'settingAnimateStyle', ['None', 'Animate', 'Disable']).onChange((value) => {
+var guiObjectPanelStyle = guiViewSettingsAnimationSettings.add(viewSettingsState, 'toolbarAnimateStyle', ['None', 'Animate', 'Disable']).onChange((value) => {
     updateFooter(switchTypes[lastClickedTypeID]);
 })
 
-var guiObjectPanelAnimationDuration = guiViewSettingsAnimationSettings.add(viewSettingsState, "settingDuration", 0, 2000);
+var guiObjectPanelAnimationDuration = guiViewSettingsAnimationSettings.add(viewSettingsState, "toolbarDuration", 0, 2000);
 
 //////// ACTUAL ACTION ///////
 canvasContainer.addEventListener("scroll", (target) => {
@@ -527,10 +527,10 @@ function updateFooter(type) {
     // let viewSettingButtonLabels = document.querySelectorAll("div.action label");
     for (let i = 0; i < viewSettingButtons.length; i++) {
 
-        if (viewSettingsState.settingAnimateStyle == "Animate") {
+        if (viewSettingsState.toolbarAnimateStyle == "Animate") {
 
             if (remnants.includes(viewSettingButtonLabels[i].innerText)) {
-                viewSettingButtons[i].style.transition = "all " + (Math.round(viewSettingsState.settingDuration * 10 / 1000) / 10) + "s ease-in-out";
+                viewSettingButtons[i].style.transition = "all " + (Math.round(viewSettingsState.toolbarDuration * 10 / 1000) / 10) + "s ease-in-out";
             }
             for (let j = 0; j < type.viewSettings.length; j++) {
                 if (type.viewSettings[j] == viewSettingButtonLabels[i].innerText) {
@@ -547,7 +547,7 @@ function updateFooter(type) {
                 viewSettingButtons[i].style.padding = "0px";
             }
 
-        } else if (viewSettingsState.settingAnimateStyle == "Disable") {
+        } else if (viewSettingsState.toolbarAnimateStyle == "Disable") {
             for (let j = 0; j < type.viewSettings.length; j++) {
                 if (type.viewSettings[j] == viewSettingButtonLabels[i].innerText) {
                     viewSettingButtons[i].style.width = viewSettingsX[i].width
