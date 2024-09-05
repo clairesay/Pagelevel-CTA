@@ -1,3 +1,4 @@
+// add more CTA types here
 var switchTypes = [
     {
         type: "Print",
@@ -37,42 +38,7 @@ var switchTypes = [
     }
 ];
 
-// GUI
-const gui = new dat.GUI({ autoPlace: false });
-document.querySelector("#gui").append(gui.domElement);
-
-var prototypeState = {
-    icon: false,
-    iconDuration: 500,
-    // animateIconLowestOpacity: 40,
-
-    text: false,
-    textDuration: 500,
-
-    container: true,
-    containerDuration: 200
-    // animateTextLowestOpacity: 40
-};
-
-gui.add(prototypeState, "icon")
-gui.add(prototypeState, "iconDuration", 0, 2000)
-
-gui.add(prototypeState, "text")
-gui.add(prototypeState, "textDuration", 0, 2000)
-
-// transition state for container
-gui.add(prototypeState, "container").onChange((value) => {
-    if (value == true) {
-        button.style.transition = "width " + (Math.round(prototypeState.containerDuration * 10 / 1000) / 10) + "s ease-in-out";
-    } else {
-        button.style.transition = "none";
-    }
-})
-
-// transition duration for container 
-gui.add(prototypeState, "containerDuration", 0, 2000).onChange((value) => {
-    button.style.transitionDuration = Math.round(value * 10 / 1000) / 10 + "s";
-})
+//////// Global variables //////////
 
 // store the last clicked button type
 var lastClickedType = "Print";
@@ -91,9 +57,57 @@ var canvasContainer = document.querySelector("main");
 var timeCount = 0;
 var lastType = "Print";
 
+// the footer
+const toggle = document.querySelector("section#view-settings button.tertiary.icon");
+const footer = document.querySelector("footer");
+const main = document.querySelector("main");
+
+//////// GUI CONTROLS //////////
+const gui = new dat.GUI({ autoPlace: false });
+document.querySelector("#gui").append(gui.domElement);
+
+// GUI variables
+var prototypeState = {
+    // icon opacity
+    icon: false,
+    iconDuration: 500,
+
+    // text opacity
+    text: false,
+    textDuration: 500,
+
+    // container
+    container: true,
+    containerDuration: 200
+};
+
+// icon animation
+var guiIconAnimation = gui.add(prototypeState, "icon")
+var guiIconAnimationDuration = gui.add(prototypeState, "iconDuration", 0, 2000)
+
+// text animation
+var guiTextAnimation = gui.add(prototypeState, "text")
+var guiTextAnimationDuration = gui.add(prototypeState, "textDuration", 0, 2000)
+
+// transition state for container
+var guiContainerAnimation = gui.add(prototypeState, "container").onChange((value) => {
+    if (value == true) {
+        button.style.transition = "width " + (Math.round(prototypeState.containerDuration * 10 / 1000) / 10) + "s ease-in-out";
+    } else {
+        button.style.transition = "none";
+    }
+})
+
+// transition duration for container 
+var guiContainerAnimationDuration = gui.add(prototypeState, "containerDuration", 0, 2000).onChange((value) => {
+    button.style.transitionDuration = Math.round(value * 10 / 1000) / 10 + "s";
+})
+
+
+
+
 
 canvasContainer.addEventListener("scroll", (target) => {
-    // function isScrolledIntoView(el) {
     var canvases = document.querySelectorAll("article");
 
     for (let i = 0; i < canvases.length; i++) {
@@ -125,13 +139,11 @@ canvasContainer.addEventListener("scroll", (target) => {
 
 for (let i = 0; i < switchTypes.length; i++) {
 
-    // create a page for each type
-    ////////
+    // create a canvas page for each type and append to container
     let thisCanvas = document.createElement("article");
     canvasContainer.appendChild(thisCanvas);
     thisCanvas.innerText = switchTypes[i].type;
 
-    ////////
     // create a switch for each type
     let thisSwitch = document.createElement("div");
     thisSwitch.classList.add("switch");
@@ -142,77 +154,19 @@ for (let i = 0; i < switchTypes.length; i++) {
         // check for duplicate clicks
         if (target.srcElement.innerText == lastClickedType) return;
 
+        // call relevant functions
         changeButton(switchTypes[i], i);
-
         visibility(false);
-
-
         fixScroll(false, "instant");
-
-
     })
 
     // add switch to the container
     switchContainer.appendChild(thisSwitch);
 }
 
-function changeButton(type, i) {
-    // replace selected tile
-    let allTypes = document.querySelectorAll("section#switches div.switch");
-    for (let n = 0; n < allTypes.length; n++) {
-        allTypes[n].classList.remove("selected");
-    }
 
-    allTypes[i].classList.add("selected");
-
-    // replace button content
-    button.innerHTML = "<img src=" + type.icon + ">" + type.copy;
-
-    // set button width
-    button.style.width = type.width;
-
-    // checking for the none case
-    if (type.type == "None") {
-        button.style.padding = "0px";
-        button.style.opacity = "0%";
-        button.style.marginLeft = "0px";
-    } else {
-        button.style.padding = "8px";
-        button.style.opacity = "100%";
-        button.style.marginLeft = "8px";
-    }
-
-    if (prototypeState.icon == true) {
-        // apply animations
-        button.querySelector("img").style.animationName = "opacityAnimation";
-
-        // remove animations upon completion
-        setTimeout(() => {
-            button.querySelector("img").style.animationName = "none";
-        }, prototypeState.iconDuration)
-    }
-
-    if (prototypeState.text == true) {
-        // apply animations
-        button.style.animationName = "colorAnimation";
-
-        // remove animations upon completion
-        setTimeout(() => {
-            button.style.animationName = "none";
-        }, prototypeState.textDuration)
-    }
-
-    lastClickedType = type.type;
-    lastClickedTypeID = i;
-    // console.log(lastClickedType);
-}
-
-const toggle = document.querySelector("section#view-settings button.tertiary.icon");
-const footer = document.querySelector("footer");
-const main = document.querySelector("main");
 toggle.classList.add("thumbnail")
 toggle.addEventListener("click", () => {
-    // console.log("yes");
     if (toggle.classList.contains("thumbnail")) {
 
         toggle.classList.remove("thumbnail");
@@ -237,16 +191,67 @@ toggle.addEventListener("click", () => {
 
         switchContainer.style.display = "flex";
 
-
         visibility(false);
 
         main.style.overflow = "hidden";
         main.style.height = "calc(100vh - 6px - 58px - 184px - 16px)"
         fixScroll(true, "instant");
     }
-
 })
 
+// function to update the CTA
+function changeButton(type, i) {
+    // replace selected tile
+    let allTypes = document.querySelectorAll("section#switches div.switch");
+    for (let n = 0; n < allTypes.length; n++) {
+        allTypes[n].classList.remove("selected");
+    }
+    allTypes[i].classList.add("selected");
+
+    // replace button content
+    button.innerHTML = "<img src=" + type.icon + ">" + type.copy;
+
+    // set button width
+    button.style.width = type.width;
+
+    // checking for the none case
+    if (type.type == "None") {
+        button.style.padding = "0px";
+        button.style.opacity = "0%";
+        button.style.marginLeft = "0px";
+    } else {
+        button.style.padding = "8px";
+        button.style.opacity = "100%";
+        button.style.marginLeft = "8px";
+    }
+
+    // check if we should apply animations based on GUI variables
+    if (prototypeState.icon == true) {
+        // apply animations
+        button.querySelector("img").style.animationName = "opacityAnimation";
+
+        // remove animations upon completion
+        setTimeout(() => {
+            button.querySelector("img").style.animationName = "none";
+        }, prototypeState.iconDuration)
+    }
+
+    if (prototypeState.text == true) {
+        // apply animations
+        button.style.animationName = "colorAnimation";
+
+        // remove animations upon completion
+        setTimeout(() => {
+            button.style.animationName = "none";
+        }, prototypeState.textDuration)
+    }
+
+    // update global values
+    lastClickedType = type.type;
+    lastClickedTypeID = i;
+}
+
+// Function to adjust visibility of non-focused canvases
 function visibility(makeAllVisible) {
     if (makeAllVisible) {
         for (let i = 0; i < switchContainer.children.length; i++) {
@@ -263,41 +268,26 @@ function visibility(makeAllVisible) {
     }
 }
 
-visibility(false);
-
+// Function to adjust scroll position
 function fixScroll(animate, scrollBehaviour) {
-    // var scrollBehaviour;
     if (animate) {
-        // scrollBehaviour = "smooth";
         value = 10;
     } else {
-        // scrollBehaviour = "smooth"
         value = 24;
     }
-    // console.log("bruh")
+
     var rect = document.querySelector("article").getBoundingClientRect();
     var elemHeight = rect.height;
-    // console.log(lastClickedTypeID);
-    // var elemBottom = rect.bottom;
-    // if (lastClickedType == switchTypes.length - 1) {
-    //     canvasContainer.scrollTo({
-    //         top: (elemHeight*lastClickedTypeID + 500), 
-    //         left: 0, 
-    //         behavior: scrollBehaviour
-    //     });
-    // } else {
+
     canvasContainer.scrollTo({
         top: (elemHeight + value) * lastClickedTypeID,
         left: 0,
         behavior: scrollBehaviour
     });
-    // }
 }
-// addEventListener("keypress", (event) => {});
 
+// Checking arrow keys
 window.addEventListener("keydown", (event) => {
-    // var curren
-    // alert(event.key);
     if (event.key == "ArrowRight") {
         if (lastClickedTypeID + 1 >= switchTypes.length) return;
         else changeButton(switchTypes[lastClickedTypeID + 1], lastClickedTypeID + 1); visibility(false); fixScroll(false, "instant");
@@ -308,7 +298,6 @@ window.addEventListener("keydown", (event) => {
     }
 })
 
-// initialise
+// Initialise
+visibility(false);
 changeButton(switchTypes[0], 0)
-
-///// animation //////
