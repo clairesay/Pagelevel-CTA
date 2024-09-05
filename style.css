@@ -12,11 +12,15 @@
     --white75: rgba(255, 255, 255, 0.75);
     --white90: rgba(255, 255, 255, 0.9);
     --white: #ffffff;
+    --black00: rgba(14, 19, 24, 0);
     --black07: rgba(14, 19, 24, 0.07);
     --black15: rgba(14, 19, 24, 0.15);
     --black20: rgba(14, 19, 24, 0.20);
     --black: #0e1318;
 
+    --typography-tertiary: rgba(14, 19, 24, 0.70);
+
+    --Background-colorTabdock: #F6F7F8;
 
     --primary: #8B3DFF;
     --Primitive-Gradient-gradientCanvaBrandHorizontal: linear-gradient(90deg, #00C4CC 0%, #7D2AE8 100%);
@@ -27,7 +31,7 @@
 }
 
 body {
-    background: var(--Background-colorTabdock, #F6F7F8);
+    background: var(--Background-colorTabdock);
     display: grid;
     grid-template-rows: 58px auto;
     /* overflow: clip; */
@@ -52,7 +56,7 @@ header {
     /* gap: var(--oneU); */
 }
 
-header > * {
+header>* {
     margin-left: 8px;
 }
 
@@ -68,26 +72,27 @@ input {
     border-radius: var(--oneU);
     border: none;
 
-    transition: all 0.1s linear;
+    transition: background-color 0.1s linear;
 
 }
 
 button#target {
     width: var(--startingWidth);
-    transition: width 200ms ease-in-out;
+    /* transition: width 200ms ease-in-out; */
     text-wrap: nowrap;
     animation-duration: 500ms;
     overflow: clip;
 }
 
 button#target img {
-    animation-duration: 500ms; 
+    animation-duration: 500ms;
 }
 
 @keyframes colorAnimation {
     0% {
         color: var(--white40);
     }
+
     75% {
         color: var(--white40);
     }
@@ -97,6 +102,7 @@ button#target img {
     0% {
         opacity: 40%;
     }
+
     75% {
         opacity: 40%;
     }
@@ -172,12 +178,12 @@ footer {
 
 section#view-settings {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
     flex-grow: 1;
     height: 100%;
-    justify-self: flex-end;
-    align-self: flex-end;
+    /* justify-self: flex-end; */
+    /* align-self: flex-end; */
 }
 
 
@@ -234,14 +240,18 @@ section#switches div:active {
 
 button.tertiary {
     height: 32px;
+    background-color: transparent;
+}
+
+button.tertiary.icon {
     width: 32px;
     padding: 4px;
-    background-color: transparent;
 }
 
 button.tertiary:hover {
     background-color: var(--black07);
 }
+
 /* input:hover {
     border: 0.2px solid var(--borderColorButton);
 } */
@@ -271,5 +281,48 @@ main {
 aside#object-panel {
     width: 72px;
     background-color: #f6f7f8;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 56px - 32px);
+
+    display: flex;
+    flex-direction: column;
+    /* gap: 16px; */
+    padding: 16px 0;
+
+}
+
+aside#object-panel div.action {
+    font-size: 12px;
+    font-family: 'CanvaSansMedium';
+    color: var(--typography-tertiary);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 72px;
+    height: 52px;
+
+    margin-bottom: 16px;
+
+    overflow: clip;
+
+    /* transition: height 200ms ease-in-out; */
+}
+
+section#view-settings div {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  /* ÷  flex-direction: row; */
+
+}
+
+section#view-settings div button.tertiary {
+    padding: 8px;
+    /* padding-left: 4px; */
+    gap: 4px;
+    height: 32px;
+    margin-right: 8px;
+    background-color: var(--Background-colorTabdock);
+    /* background-color: var(--black00); */
+    /* background-color: blue; */
 }

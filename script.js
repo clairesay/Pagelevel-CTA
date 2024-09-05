@@ -4,39 +4,167 @@ var switchTypes = [
         type: "Print",
         copy: "Print with Canva",
         icon: "assets/truck.svg",
-        width: "169.56px"
+        width: "169.56px",
+        actions: [
+            "Design",
+            "Elements",
+            "Text",
+            "Brand",
+            "Uploads",
+            "Draw",
+            "Projects",
+            "Apps"
+        ],
+        viewSettings: [
+            "Notes"
+        ]
     },
     {
         type: "Websites",
         copy: "Publish Website",
         icon: "assets/website.svg",
-        width: "166.5px"
+        width: "166.5px",
+        actions: [
+            "Design",
+            "Elements",
+            "Text",
+            "Brand",
+            "Uploads",
+            "Draw",
+            "Projects",
+            "Apps"
+        ],
+        viewSettings: [
+            "Notes",
+            "Duration",
+            "Timer"
+        ]
     },
     {
         type: "Presentations",
         copy: "Present",
         icon: "assets/present.svg",
-        width: "110.32px"
+        width: "110.32px",
+        actions: [
+            "Design",
+            "Elements",
+            "Text",
+            "Brand",
+            "Uploads",
+            "Draw",
+            "Projects",
+            "Apps"
+        ],
+        viewSettings: [
+            "Notes",
+            "Duration",
+            "Timer"
+        ]
     },
     {
         type: "Brand Admin",
         copy: "Publish as Brand Template",
         icon: "assets/brand.svg",
-        width: "237.65px"
+        width: "237.65px",
+        actions: [
+            "Design",
+            "Elements",
+            "Text",
+            "Brand",
+            "Uploads",
+            "Draw",
+            "Projects",
+            "Apps"
+        ],
+        viewSettings: [
+            "Notes",
+            "Duration",
+            "Timer"
+        ]
     },
     {
         type: "Preview",
         copy: "Preview",
         icon: "assets/eye.svg",
-        width: "111.81px"
+        width: "111.81px",
+        actions: [
+            "Design",
+            "Elements",
+            "Text",
+            "Brand",
+            "Uploads",
+            "Draw",
+            "Projects",
+            "Apps"
+        ],
+        viewSettings: [
+            "Notes",
+            "Duration",
+            "Timer"
+        ]
     },
     {
-        type: "None",
+        type: "Docs",
         copy: "",
         icon: "assets/blank.svg",
-        width: "0px"
+        width: "0px",
+        actions: [
+            "Design",
+            "Elements",
+            "Brand",
+            "Uploads",
+            "Projects",
+            "Apps"
+        ],
+        viewSettings: [
+            "Outline"
+        ]
     }
 ];
+
+var actionTypes = {
+    "Design": "assets/object-panel/design.svg",
+    "Elements": "assets/object-panel/elements.svg",
+    "Text": "assets/object-panel/text.svg",
+    "Brand": "assets/object-panel/brand.svg",
+    "Uploads": "assets/object-panel/uploads.svg",
+    "Draw": "assets/object-panel/draw.svg",
+    "Projects": "assets/object-panel/projects.svg",
+    "Apps": "assets/object-panel/apps.svg"
+}
+
+var viewSettings = {
+    "Notes": "assets/object-panel/design.svg",
+    "Outline": "assets/object-panel/elements.svg",
+    "Duration": "assets/object-panel/text.svg",
+    "Timer": "assets/object-panel/brand.svg"
+}
+
+var viewSettingsX = [
+    {
+        type: "Notes",
+        width: "80.32px",
+        icon: "assets/view-settings/notes.svg"
+    },
+    {
+        type: "Outline",
+        width: "90.38px",
+        icon: "assets/view-settings/outline.svg"
+    },
+    {
+        type: "Duration",
+        width: "99.99px",
+        icon: "assets/view-settings/duration.svg"
+    },
+    {
+        type: "Timer",
+        width: "78.9px",
+        icon: "assets/view-settings/timer.svg"
+    },
+]
+
+var lastActionTypes = switchTypes[0].actions;
+var lastViewSettingTypes = switchTypes[0].viewSettings;
 
 //////// Global variables //////////
 
@@ -62,51 +190,88 @@ const toggle = document.querySelector("section#view-settings button.tertiary.ico
 const footer = document.querySelector("footer");
 const main = document.querySelector("main");
 
+// the object panel
+var objectPanel = document.querySelector("aside#object-panel");
+
 //////// GUI CONTROLS //////////
 const gui = new dat.GUI({ autoPlace: false });
 document.querySelector("#gui").append(gui.domElement);
 
 // GUI variables
-var prototypeState = {
+// cta
+var buttonState = {
     // icon opacity
-    icon: false,
+    animateIcon: false,
     iconDuration: 500,
 
     // text opacity
-    text: false,
+    animateText: false,
     textDuration: 500,
 
     // container
-    container: true,
+    animateContainer: false,
     containerDuration: 200
 };
 
+// object panel
+var objectPanelState = {
+    // animateTabs: false,
+    tabAnimateStyle: "None",
+    tabsDuration: 200
+}
+
+// view settings
+var viewSettingsState = {
+    // animateTabs: false,
+    settingAnimateStyle: "None",
+    settingDuration: 200
+}
+
 // icon animation
-var guiIconAnimation = gui.add(prototypeState, "icon")
-var guiIconAnimationDuration = gui.add(prototypeState, "iconDuration", 0, 2000)
+const guiCTAAnimationSettings = gui.addFolder("CTA");
+guiCTAAnimationSettings.open();
+var guiIconAnimation = guiCTAAnimationSettings.add(buttonState, "animateIcon")
+var guiIconAnimationDuration = guiCTAAnimationSettings.add(buttonState, "iconDuration", 0, 2000)
 
 // text animation
-var guiTextAnimation = gui.add(prototypeState, "text")
-var guiTextAnimationDuration = gui.add(prototypeState, "textDuration", 0, 2000)
+var guiTextAnimation = guiCTAAnimationSettings.add(buttonState, "animateText")
+var guiTextAnimationDuration = guiCTAAnimationSettings.add(buttonState, "textDuration", 0, 2000)
 
 // transition state for container
-var guiContainerAnimation = gui.add(prototypeState, "container").onChange((value) => {
+var guiContainerAnimation = guiCTAAnimationSettings.add(buttonState, "animateContainer").onChange((value) => {
     if (value == true) {
-        button.style.transition = "width " + (Math.round(prototypeState.containerDuration * 10 / 1000) / 10) + "s ease-in-out";
+        button.style.transition = "width " + (Math.round(buttonState.containerDuration * 10 / 1000) / 10) + "s ease-in-out";
     } else {
         button.style.transition = "none";
     }
 })
 
 // transition duration for container 
-var guiContainerAnimationDuration = gui.add(prototypeState, "containerDuration", 0, 2000).onChange((value) => {
+var guiContainerAnimationDuration = guiCTAAnimationSettings.add(buttonState, "containerDuration", 0, 2000).onChange((value) => {
     button.style.transitionDuration = Math.round(value * 10 / 1000) / 10 + "s";
 })
 
+// object panel animation
+const guiOPAnimationSettings = gui.addFolder("Object Panel");
+guiOPAnimationSettings.open();
 
+var guiObjectPanelStyle = guiOPAnimationSettings.add(objectPanelState, 'tabAnimateStyle', ['None', 'Animate', 'Disable']).onChange((value) => {
+    updateObjectPanel(switchTypes[lastClickedTypeID]);
+})
 
+var guiObjectPanelAnimationDuration = guiOPAnimationSettings.add(objectPanelState, "tabsDuration", 0, 2000);
 
+// view settings animation
+const guiViewSettingsAnimationSettings = gui.addFolder("View Settings");
+guiViewSettingsAnimationSettings.open();
 
+var guiObjectPanelStyle = guiViewSettingsAnimationSettings.add(viewSettingsState, 'settingAnimateStyle', ['None', 'Animate', 'Disable']).onChange((value) => {
+    updateFooter(switchTypes[lastClickedTypeID]);
+})
+
+var guiObjectPanelAnimationDuration = guiViewSettingsAnimationSettings.add(viewSettingsState, "settingDuration", 0, 2000);
+
+//////// ACTUAL ACTION ///////
 canvasContainer.addEventListener("scroll", (target) => {
     var canvases = document.querySelectorAll("article");
 
@@ -136,6 +301,46 @@ canvasContainer.addEventListener("scroll", (target) => {
         };
     }
 })
+
+// populate the object panel for each type
+for (const [key, value] of Object.entries(actionTypes)) {
+    let action = document.createElement("div");
+    action.classList.add("action");
+
+    objectPanel.appendChild(action);
+
+    let actionIcon = document.createElement("img");
+    actionIcon.src = value;
+
+    let actionLabel = document.createElement("label");
+    actionLabel.innerText = key;
+
+    action.appendChild(actionIcon);
+    action.appendChild(actionLabel);
+}
+
+// populate footer with buttons
+var viewSettingContainer = document.querySelector("section#view-settings > div")
+for (let i = 0; i < viewSettingsX.length; i ++) {
+    // let thisViewSetting = viewSettingX[i];
+    let viewSetting = document.createElement("button");
+    viewSetting.classList.add("view-setting");
+    viewSetting.classList.add("tertiary");
+    viewSetting.classList.add("full");
+
+    let viewSettingIcon = document.createElement("img");
+    viewSettingIcon.src = viewSettingsX[i].icon;
+
+    let viewSettingLabel = document.createElement("label");
+    viewSettingLabel.innerText = viewSettingsX[i].type;
+
+
+    viewSetting.appendChild(viewSettingIcon);
+    viewSetting.appendChild(viewSettingLabel);
+    viewSettingContainer.appendChild(viewSetting);
+
+}
+
 
 for (let i = 0; i < switchTypes.length; i++) {
 
@@ -215,7 +420,7 @@ function changeButton(type, i) {
     button.style.width = type.width;
 
     // checking for the none case
-    if (type.type == "None") {
+    if (type.type == "Docs") {
         button.style.padding = "0px";
         button.style.opacity = "0%";
         button.style.marginLeft = "0px";
@@ -226,29 +431,155 @@ function changeButton(type, i) {
     }
 
     // check if we should apply animations based on GUI variables
-    if (prototypeState.icon == true) {
+    if (buttonState.animateIcon == true) {
         // apply animations
         button.querySelector("img").style.animationName = "opacityAnimation";
 
         // remove animations upon completion
         setTimeout(() => {
             button.querySelector("img").style.animationName = "none";
-        }, prototypeState.iconDuration)
+        }, buttonState.iconDuration)
     }
 
-    if (prototypeState.text == true) {
+    if (buttonState.animateText == true) {
         // apply animations
         button.style.animationName = "colorAnimation";
 
         // remove animations upon completion
         setTimeout(() => {
             button.style.animationName = "none";
-        }, prototypeState.textDuration)
+        }, buttonState.textDuration)
     }
 
+    updateObjectPanel(type)
+    updateFooter(type)
+    lastActionTypes = type.actions;
+    lastViewSettingTypes = type.viewSettings;
     // update global values
     lastClickedType = type.type;
     lastClickedTypeID = i;
+}
+
+function updateObjectPanel(type) {
+    let tabs = document.querySelectorAll("div.action");
+    let tabLabels = document.querySelectorAll("div.action label");
+    // getting the differences
+    let remnants = lastActionTypes.filter(function (obj) { return type.actions.indexOf(obj) == -1; }).concat(type.actions.filter(function (obj) { return lastActionTypes.indexOf(obj) == -1; }))
+
+    for (let i = 0; i < tabs.length; i++) {
+        if (objectPanelState.tabAnimateStyle == "Animate") {
+            if (remnants.includes(tabLabels[i].innerText)) {
+                tabs[i].style.transition = "height " + (Math.round(objectPanelState.tabsDuration * 10 / 1000) / 10) + "s ease-in-out";
+            } else {
+                tabs[i].style.transition = "none";
+            }
+
+            for (let j = 0; j < type.actions.length; j++) {
+                if (type.actions[j] == tabLabels[i].innerText) {
+                    tabs[i].style.height = "52px";
+                    tabs[i].style.opacity = "100%";
+                    tabs[i].style.marginBottom = "16px";
+
+                    break;
+                }
+                tabs[i].style.height = "0px";
+                tabs[i].style.opacity = "0%";
+                tabs[i].style.marginBottom = "0px";
+            }
+
+        } else if (objectPanelState.tabAnimateStyle == "Disable") {
+            tabs[i].style.transition = "none";
+            for (let j = 0; j < type.actions.length; j++) {
+                if (type.actions[j] == tabLabels[i].innerText) {
+                    tabs[i].style.height = "52px";
+                    tabs[i].style.opacity = "100%";
+                    tabs[i].style.marginBottom = "16px";
+
+                    break;
+                }
+                tabs[i].style.height = "52px";
+                tabs[i].style.opacity = "50%";
+                tabs[i].style.marginBottom = "16px";
+            }
+
+        } else {
+            tabs[i].style.transition = "none";
+            for (let j = 0; j < type.actions.length; j++) {
+                if (type.actions[j] == tabLabels[i].innerText) {
+                    tabs[i].style.height = "52px";
+                    tabs[i].style.opacity = "100%";
+                    tabs[i].style.marginBottom = "16px";
+
+                    break;
+                }
+                tabs[i].style.height = "0px";
+                tabs[i].style.opacity = "0%";
+                tabs[i].style.marginBottom = "0px";
+            }
+        }
+    }
+}
+
+function updateFooter(type) {
+    let viewSettingButtons = document.querySelectorAll("section#view-settings div button.view-setting");
+    let viewSettingButtonLabels = document.querySelectorAll("section#view-settings div button.view-setting label");
+    let remnants = lastViewSettingTypes.filter(function (obj) { return type.viewSettings.indexOf(obj) == -1; }).concat(type.viewSettings.filter(function (obj) { return lastViewSettingTypes.indexOf(obj) == -1; }))
+    // let viewSettingButtonLabels = document.querySelectorAll("div.action label");
+    for (let i = 0; i < viewSettingButtons.length; i++) {
+
+        if (viewSettingsState.settingAnimateStyle == "Animate") {
+
+            if (remnants.includes(viewSettingButtonLabels[i].innerText)) {
+                viewSettingButtons[i].style.transition = "all " + (Math.round(viewSettingsState.settingDuration * 10 / 1000) / 10) + "s ease-in-out";
+            }
+            for (let j = 0; j < type.viewSettings.length; j++) {
+                if (type.viewSettings[j] == viewSettingButtonLabels[i].innerText) {
+                    viewSettingButtons[i].style.width = viewSettingsX[i].width
+                    viewSettingButtons[i].style.opacity = "100%";
+                    viewSettingButtons[i].style.marginRight = "8px";
+                    viewSettingButtons[i].style.padding = "8px";
+
+                    break;
+                }
+                viewSettingButtons[i].style.width = "0px"
+                viewSettingButtons[i].style.opacity = "0%";
+                viewSettingButtons[i].style.marginRight = "0px";
+                viewSettingButtons[i].style.padding = "0px";
+            }
+
+        } else if (viewSettingsState.settingAnimateStyle == "Disable") {
+            for (let j = 0; j < type.viewSettings.length; j++) {
+                if (type.viewSettings[j] == viewSettingButtonLabels[i].innerText) {
+                    viewSettingButtons[i].style.width = viewSettingsX[i].width
+                    viewSettingButtons[i].style.opacity = "100%";
+                    viewSettingButtons[i].style.marginRight = "8px";
+                    viewSettingButtons[i].style.padding = "8px";
+
+                    break;
+                }
+                viewSettingButtons[i].style.width = viewSettingsX[i].width
+                viewSettingButtons[i].style.opacity = "40%";
+                viewSettingButtons[i].style.marginRight = "8px";
+                viewSettingButtons[i].style.padding = "8px";
+            }
+        } else {
+            viewSettingButtons[i].style.transition = "none";
+            for (let j = 0; j < type.viewSettings.length; j++) {
+                if (type.viewSettings[j] == viewSettingButtonLabels[i].innerText) {
+                    viewSettingButtons[i].style.width = viewSettingsX[i].width
+                    viewSettingButtons[i].style.opacity = "100%";
+                    viewSettingButtons[i].style.marginRight = "8px";
+                    viewSettingButtons[i].style.padding = "8px";
+
+                    break;
+                }
+                viewSettingButtons[i].style.width = "0px"
+                viewSettingButtons[i].style.opacity = "0%";
+                viewSettingButtons[i].style.marginRight = "0px";
+                viewSettingButtons[i].style.padding = "0px";
+            }
+        }
+    }
 }
 
 // Function to adjust visibility of non-focused canvases
